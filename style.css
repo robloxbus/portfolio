@@ -1,0 +1,30 @@
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background: #fdfdfd;
+  color: #333;
+}
+
+header {
+  background: #222;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+
+section {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+a {
+  color: #0066cc;
+}
+
+h2 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
