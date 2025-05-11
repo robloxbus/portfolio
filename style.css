@@ -93,4 +93,12 @@ nav a:hover {
   section {
     padding: 1rem;
   }
+
+  .gif-center {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
 }
