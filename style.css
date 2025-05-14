@@ -80,6 +80,34 @@ nav a:hover {
   color: #66ccff;
 }
 
+/* Project layout */
+.project {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.project-description {
+  flex: 1 1 50%;
+}
+
+.project-image {
+  flex: 1 1 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
 @media (max-width: 600px) {
   nav li {
     display: block;
@@ -94,13 +122,29 @@ nav a:hover {
     padding: 1rem;
   }
 
-  .gif-center {
+  .project {
+    flex-direction: column;
+  }
+
+  .project-description,
+  .project-image {
+    flex: 1 1 100%;
+  }
+
+  .project-image img {
+    margin: 1rem auto;
+  }
+}
+
+/* Optional enhancements */
+.gif-center {
   display: block;
   margin: 2rem auto;
   max-width: 100%;
   border-radius: 10px;
 }
-  img {
+
+img {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
@@ -108,6 +152,7 @@ nav a:hover {
   display: block;
   margin: 1rem auto;
 }
+
 button {
   background-color: #0066cc;
   color: white;
@@ -120,7 +165,8 @@ button {
   margin-top: 1rem;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
-  button:hover {
+
+button:hover {
   background-color: #004c99;
   transform: translateY(-2px);
 }
@@ -130,5 +176,4 @@ button {
     width: 100%;
   }
 }
-  
-}
+
