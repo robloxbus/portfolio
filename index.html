@@ -29,13 +29,36 @@
 </script>
   </section>
 
-  <section id="projects">
-    <h2>Featured Projects</h2>
-    <ul>
-      <li><a href="https://github.com/robloxbus/Computer-Graphic-projects.git">Raytracer</a> – A ray tracing program built as part of UMBC coursework.</li>
-      <li><a href="https://github.com/robloxbus/TCP-client-server-simulations.git">Secure Shell TCP client/server connection</a> A TCP client server connection using SSH encryption.</li>
-    </ul>
-  </section>
+  <section id="interactive-terminal">
+  <h2>TCP Client Simulator</h2>
+  <div class="terminal-window">
+    <div id="terminal-output"></div>
+    <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
+  </div>
+</section>
+
+<script>
+  const output = document.getElementById("terminal-output");
+  const input = document.getElementById("terminal-input");
+
+  const responses = {
+    "connect 127.0.0.1 3000": "Connecting to 127.0.0.1:3000...\n[✓] Connection established.",
+    "send hello": "[Client] Sending 'hello'...\n[Server] Received: hello",
+    "exit": "[✗] Connection closed.",
+  };
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const command = input.value.trim();
+      output.innerHTML += `<div class="command-line">> ${command}</div>`;
+      output.innerHTML += `<div class="terminal-response">${responses[command] || "Unknown command."}</div>`;
+      output.scrollTop = output.scrollHeight;
+      input.value = "";
+    }
+  });
+</script>
+
+
 
   <section id="contact">
     <h2>Contact</h2>
