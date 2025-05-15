@@ -39,11 +39,13 @@
 
 <script>
   const output = document.getElementById("terminal-output");
-  const input = document.getElementById("terminal-input");
+const input = document.getElementById("terminal-input");
 
-  let isConnected = false;
+let isConnected = false;
+let history = [];
+let historyIndex = -1;
 
-  const commandGuide = `
+const commandGuide = `
 Available commands:
   connect 127.0.0.1 3000   - Connect to the server
   send <message>          - Send a message to the server (after connecting)
@@ -51,47 +53,73 @@ Available commands:
   help                    - Show this help message
 `;
 
-  function printOutput(text) {
-    output.innerHTML += `<div class="terminal-response">${text}</div>`;
-    output.scrollTop = output.scrollHeight;
+function printOutput(text) {
+  output.innerHTML += `<div class="terminal-response">${text}</div>`;
+  output.scrollTop = output.scrollHeight;
+}
+
+printOutput("[TCP Client Simulator Ready]\nType 'help' for available commands.");
+
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const command = input.value.trim();
+    if (command) {
+      history.push(command);
+      historyIndex = history.length;
+    }
+
+    output.innerHTML += `<div class="command-line">> ${command}</div>`;
+    input.value = "";
+
+    if (command === "help") {
+      printOutput(commandGuide);
+    } else if (command === "connect 127.0.0.1 3000") {
+      if (isConnected) {
+        printOutput("[!] Already connected.");
+      } else {
+        isConnected = true;
+        printOutput("Connecting to 127.0.0.1:3000...\n[✓] Connection established.");
+      }
+    } else if (command.startsWith("send ")) {
+      if (!isConnected) {
+        printOutput("[✗] Error: Not connected. Use 'connect 127.0.0.1 3000' first.");
+      } else {
+        const message = command.slice(5);
+        printOutput(`[Client] Sending '${message}'...\n[Server] Received: ${message}`);
+      }
+    } else if (command === "exit") {
+      if (!isConnected) {
+        printOutput("[!] No active connection to close.");
+      } else {
+        isConnected = false;
+        printOutput("[✗] Connection closed.");
+      }
+    } else {
+      printOutput("Unknown command. Type 'help' for available commands.");
+    }
   }
 
-  printOutput("[TCP Client Simulator Ready]\nType 'help' for available commands.");
-
-  input.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      const command = input.value.trim();
-      output.innerHTML += `<div class="command-line">> ${command}</div>`;
-      input.value = "";
-
-      if (command === "help") {
-        printOutput(commandGuide);
-      } else if (command === "connect 127.0.0.1 3000") {
-        if (isConnected) {
-          printOutput("[!] Already connected.");
-        } else {
-          isConnected = true;
-          printOutput("Connecting to 127.0.0.1:3000...\n[✓] Connection established.");
-        }
-      } else if (command.startsWith("send ")) {
-        if (!isConnected) {
-          printOutput("[✗] Error: Not connected. Use 'connect 127.0.0.1 3000' first.");
-        } else {
-          const message = command.slice(5);
-          printOutput(`[Client] Sending '${message}'...\n[Server] Received: ${message}`);
-        }
-      } else if (command === "exit") {
-        if (!isConnected) {
-          printOutput("[!] No active connection to close.");
-        } else {
-          isConnected = false;
-          printOutput("[✗] Connection closed.");
-        }
-      } else {
-        printOutput("Unknown command. Type 'help' for available commands.");
-      }
+  // History navigation
+  if (e.key === "ArrowUp") {
+    if (historyIndex > 0) {
+      historyIndex--;
+      input.value = history[historyIndex];
     }
-  });
+    e.preventDefault(); // prevent cursor from moving to start
+  }
+
+  if (e.key === "ArrowDown") {
+    if (historyIndex < history.length - 1) {
+      historyIndex++;
+      input.value = history[historyIndex];
+    } else {
+      historyIndex = history.length;
+      input.value = "";
+    }
+    e.preventDefault();
+  }
+});
+
 </script>
 
 
