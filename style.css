@@ -209,5 +209,32 @@ button:hover {
   transform: scale(0.98);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
+.terminal-window {
+  background: #000;
+  color: #0f0;
+  padding: 1rem;
+  border-radius: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  height: 300px;
+  overflow-y: auto;
+  border: 2px solid #333;
+}
+
+#terminal-output {
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+#terminal-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: #111;
+  color: #0f0;
+  border: none;
+  border-top: 2px solid #333;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  outline: none;
+}
 
 
