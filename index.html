@@ -16,113 +16,112 @@
   <section id="about">
     <h2>About Me</h2>
     <p>Hello! My name is Brandon and I’m currently studying Computer Science at the University of Maryland, Baltimore County. I’m in both the Game Dev and Cybersecurity tracks, and I’ll be graduating in Spring 2025. Please check out the rest of my profile!</p>
-     <div class="button-hub">
-  <button onclick="navigateTo('projects.html')">Explore GitHub Projects</button>
-  <button onclick="navigateTo('experience.html')">View Experience</button>
-  <button onclick="navigateTo('about.html')">More About Me</button>
-</div>
-
-<script>
-  function navigateTo(page) {
-    window.location.href = page;
-  }
-</script>
+    <div class="button-hub">
+      <button onclick="navigateTo('projects.html')">Explore GitHub Projects</button>
+      <button onclick="navigateTo('experience.html')">View Experience</button>
+      <button onclick="navigateTo('about.html')">More About Me</button>
+    </div>
+    <script>
+      function navigateTo(page) {
+        window.location.href = page;
+      }
+    </script>
   </section>
 
   <section id="interactive-terminal">
-  <h2>TCP Client Simulator (Not real but for fun!)</h2>
-  <div class="terminal-window">
-    <div id="terminal-output"></div>
-    <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
-  </div>
-</section>
+    <h2>TCP Client Simulator (WebSocket Edition)</h2>
+    <div class="terminal-window">
+      <div id="terminal-output"></div>
+      <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
+    </div>
+  </section>
 
-<script>
-  const output = document.getElementById("terminal-output");
-const input = document.getElementById("terminal-input");
+  <script>
+    const output = document.getElementById("terminal-output");
+    const input = document.getElementById("terminal-input");
 
-let isConnected = false;
-let history = [];
-let historyIndex = -1;
+    let ws = null;
+    let history = [];
+    let historyIndex = -1;
 
-const commandGuide = `
+    const commandGuide = `
 Available commands:
-  connect 127.0.0.1 3000   - Connect to the server
-  send <message>          - Send a message to the server (after connecting)
-  exit                    - Disconnect from the server
-  help                    - Show this help message
+  connect ws://localhost:3000   - Connect to the WebSocket server
+  send <message>                - Send a message to the server
+  exit                          - Disconnect from the server
+  help                          - Show this help message
 `;
 
-function printOutput(text) {
-  output.innerHTML += `<div class="terminal-response">${text}</div>`;
-  output.scrollTop = output.scrollHeight;
-}
-
-printOutput("[TCP Client Simulator Ready]\nType 'help' for available commands.");
-
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    const command = input.value.trim();
-    if (command) {
-      history.push(command);
-      historyIndex = history.length;
+    function printOutput(text) {
+      output.innerHTML += `<div class="terminal-response">${text}</div>`;
+      output.scrollTop = output.scrollHeight;
     }
 
-    output.innerHTML += `<div class="command-line">> ${command}</div>`;
-    input.value = "";
+    printOutput("[WebSocket Client Ready]\nType 'help' for available commands.");
 
-    if (command === "help") {
-      printOutput(commandGuide);
-    } else if (command === "connect 127.0.0.1 3000") {
-      if (isConnected) {
-        printOutput("[!] Already connected.");
-      } else {
-        isConnected = true;
-        printOutput("Connecting to 127.0.0.1:3000...\n[✓] Connection established.");
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const command = input.value.trim();
+        if (command) {
+          history.push(command);
+          historyIndex = history.length;
+        }
+
+        output.innerHTML += `<div class="command-line">> ${command}</div>`;
+        input.value = "";
+
+        if (command === "help") {
+          printOutput(commandGuide);
+        } else if (command === "connect ws://localhost:3000") {
+          if (ws && ws.readyState === WebSocket.OPEN) {
+            printOutput("[!] Already connected.");
+          } else {
+            ws = new WebSocket("ws://localhost:3000");
+
+            ws.onopen = () => printOutput("[✓] Connection established.");
+            ws.onmessage = (msg) => printOutput(`[Server] ${msg.data}`);
+            ws.onerror = (err) => printOutput(`[✗] WebSocket error.`);
+            ws.onclose = () => printOutput("[✗] Connection closed.");
+          }
+        } else if (command.startsWith("send ")) {
+          if (!ws || ws.readyState !== WebSocket.OPEN) {
+            printOutput("[✗] Error: Not connected. Use 'connect ws://localhost:3000' first.");
+          } else {
+            const message = command.slice(5);
+            ws.send(message);
+            printOutput(`[Client] Sending '${message}'...");
+          }
+        } else if (command === "exit") {
+          if (!ws || ws.readyState !== WebSocket.OPEN) {
+            printOutput("[!] No active connection to close.");
+          } else {
+            ws.close();
+          }
+        } else {
+          printOutput("Unknown command. Type 'help' for available commands.");
+        }
       }
-    } else if (command.startsWith("send ")) {
-      if (!isConnected) {
-        printOutput("[✗] Error: Not connected. Use 'connect 127.0.0.1 3000' first.");
-      } else {
-        const message = command.slice(5);
-        printOutput(`[Client] Sending '${message}'...\n[Server] Received: ${message}`);
+
+      if (e.key === "ArrowUp") {
+        if (historyIndex > 0) {
+          historyIndex--;
+          input.value = history[historyIndex];
+        }
+        e.preventDefault();
       }
-    } else if (command === "exit") {
-      if (!isConnected) {
-        printOutput("[!] No active connection to close.");
-      } else {
-        isConnected = false;
-        printOutput("[✗] Connection closed.");
+
+      if (e.key === "ArrowDown") {
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          input.value = history[historyIndex];
+        } else {
+          historyIndex = history.length;
+          input.value = "";
+        }
+        e.preventDefault();
       }
-    } else {
-      printOutput("Unknown command. Type 'help' for available commands.");
-    }
-  }
-
-  // History navigation
-  if (e.key === "ArrowUp") {
-    if (historyIndex > 0) {
-      historyIndex--;
-      input.value = history[historyIndex];
-    }
-    e.preventDefault(); // prevent cursor from moving to start
-  }
-
-  if (e.key === "ArrowDown") {
-    if (historyIndex < history.length - 1) {
-      historyIndex++;
-      input.value = history[historyIndex];
-    } else {
-      historyIndex = history.length;
-      input.value = "";
-    }
-    e.preventDefault();
-  }
-});
-
-</script>
-
-
+    });
+  </script>
 
   <section id="contact">
     <h2>Contact</h2>
