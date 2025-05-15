@@ -41,19 +41,55 @@
   const output = document.getElementById("terminal-output");
   const input = document.getElementById("terminal-input");
 
-  const responses = {
-    "connect 127.0.0.1 3000": "Connecting to 127.0.0.1:3000...\n[✓] Connection established.",
-    "send hello": "[Client] Sending 'hello'...\n[Server] Received: hello",
-    "exit": "[✗] Connection closed.",
-  };
+  let isConnected = false;
+
+  const commandGuide = `
+Available commands:
+  connect 127.0.0.1 3000   - Connect to the server
+  send <message>          - Send a message to the server (after connecting)
+  exit                    - Disconnect from the server
+  help                    - Show this help message
+`;
+
+  function printOutput(text) {
+    output.innerHTML += `<div class="terminal-response">${text}</div>`;
+    output.scrollTop = output.scrollHeight;
+  }
+
+  printOutput("[TCP Client Simulator Ready]\nType 'help' for available commands.");
 
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
       const command = input.value.trim();
       output.innerHTML += `<div class="command-line">> ${command}</div>`;
-      output.innerHTML += `<div class="terminal-response">${responses[command] || "Unknown command."}</div>`;
-      output.scrollTop = output.scrollHeight;
       input.value = "";
+
+      if (command === "help") {
+        printOutput(commandGuide);
+      } else if (command === "connect 127.0.0.1 3000") {
+        if (isConnected) {
+          printOutput("[!] Already connected.");
+        } else {
+          isConnected = true;
+          printOutput("Connecting to 127.0.0.1:3000...\n[✓] Connection established.");
+        }
+      } else if (command.startsWith("send ")) {
+        if (!isConnected) {
+          printOutput("[✗] Error: Not connected. Use 'connect 127.0.0.1 3000' first.");
+        } else {
+          const message = command.slice(5);
+          printOutput(`[Client] Sending '${message}'...\n[Server] Received: ${message}`);
+        }
+      } else if (command === "exit") {
+        if (!isConnected) {
+          printOutput("[!] No active connection to close.");
+        } else {
+          isConnected = false;
+          printOutput("[✗] Connection closed.");
+        }
+      } else {
+        printOutput("Unknown command. Type 'help' for available commands.");
+      }
     }
   });
 </script>
