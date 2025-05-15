@@ -45,6 +45,34 @@
     <div id="terminal-output"></div>
     <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
   </div>
+      </section>
+<section id="server-tutorial">
+  <h2>How to Run the WebSocket Server</h2>
+  <pre>
+1. Make sure you have Node.js installed on your machine.
+   Download from: https://nodejs.org/
+
+2. Clone or download the server files to your computer. 
+   Link to GitHub server file here: <a href="https://github.com/robloxbus/portfolio/blob/c4f5252fd6916c9606f7e1a66e6dac9c89654357/server.js">GitHub</a>
+
+3. Open a terminal on your computer and navigate to the folder containing your server:
+   <code>cd path/to/your/server/folder</code>
+
+4. Install dependencies (only once):
+   <code>npm install ws</code>
+
+5. Run the server:
+   <code>node server.js</code>
+
+6. The server will start listening on port 3000.
+
+7. Now go back to this webpage and use the terminal to connect:
+   <code>connect ws://localhost:3000</code>
+
+8. To stop the server, press <code>Ctrl + C</code> in the terminal.
+
+</pre>
+</section>
 </section>
 
 
@@ -139,34 +167,7 @@ Available commands:
 };
 
   </script>
-     </section>
-<section id="server-tutorial">
-  <h2>How to Run the WebSocket Server</h2>
-  <pre>
-1. Make sure you have Node.js installed on your machine.
-   Download from: https://nodejs.org/
-
-2. Clone or download the server files to your computer. 
-   Link to GitHub server file here: <a href="https://github.com/robloxbus/portfolio/blob/c4f5252fd6916c9606f7e1a66e6dac9c89654357/server.js">GitHub</a>
-
-3. Open a terminal on your computer and navigate to the folder containing your server:
-   <code>cd path/to/your/server/folder</code>
-
-4. Install dependencies (only once):
-   <code>npm install ws</code>
-
-5. Run the server:
-   <code>node server.js</code>
-
-6. The server will start listening on port 3000.
-
-7. Now go back to this webpage and use the terminal to connect:
-   <code>connect ws://localhost:3000</code>
-
-8. To stop the server, press <code>Ctrl + C</code> in the terminal.
-
-</pre>
-</section>
+   
 
   <section id="contact">
     <h2>Contact</h2>
