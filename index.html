@@ -28,12 +28,25 @@
     </script>
 
   <section id="interactive-terminal">
-    <h2>Local TCP Client Simulator</h2>
-    <div class="terminal-window">
-      <div id="terminal-output"></div>
-      <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
-    </div>
-  </section>
+  <h2>Local TCP Client Simulator</h2>
+  <p>
+    This interactive terminal simulates a local TCP client using WebSockets. It runs entirely on the client-side and allows you to test basic commands to interact with a local WebSocket server running on your machine.
+    <br><br>
+     <strong>Features:</strong>
+    <ul>
+      <li>Execute simple commands: <code>connect</code>, <code>send</code>, <code>exit</code>, <code>help</code></li>
+      <li>Maintains a history of commands — use ↑ and ↓ arrows to navigate</li>
+      <li>Only works when a compatible WebSocket server is running locally</li>
+    </ul>
+    This is not a real terminal and cannot execute system commands. It's a controlled simulation for demo purposes only.
+  </p>
+
+  <div class="terminal-window">
+    <div id="terminal-output"></div>
+    <input type="text" id="terminal-input" placeholder="Type a command..." autofocus />
+  </div>
+</section>
+
 
   <script>
     const output = document.getElementById("terminal-output");
