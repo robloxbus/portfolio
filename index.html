@@ -89,7 +89,7 @@ Available commands:
           } else {
             const message = command.slice(5);
             ws.send(message);
-            printOutput(`[Client] Sending '${message}'...");
+            printOutput(`[Client] Sending '${message}'...`);
           }
         } else if (command === "exit") {
           if (!ws || ws.readyState !== WebSocket.OPEN) {
@@ -120,7 +120,12 @@ Available commands:
         }
         e.preventDefault();
       }
-    });
+    })
+    window.onload = () => {
+  const input = document.getElementById("terminal-input");
+  input.focus();
+};
+
   </script>
 
   <section id="contact">
