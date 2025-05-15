@@ -80,7 +80,7 @@ Available commands:
 
             ws.onopen = () => printOutput("[✓] Connection established.");
             ws.onmessage = (msg) => printOutput(`[Server] ${msg.data}`);
-            ws.onerror = (err) => printOutput(`[✗] WebSocket error.`);
+            ws.onerror = (err) => printOutput("[✗] Could not connect: server is not active or unreachable.");
             ws.onclose = () => printOutput("[✗] Connection closed.");
           }
         } else if (command.startsWith("send ")) {
